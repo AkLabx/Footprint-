@@ -1,5 +1,6 @@
 
 const icons = {
+  AIIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.562L16.25 21.75l-.648-1.188a2.25 2.25 0 00-1.47-1.47L12.944 18l1.188-.648a2.25 2.25 0 001.47-1.47L16.25 15l.648 1.188a2.25 2.25 0 001.47 1.47L19.563 18l-1.188.648a2.25 2.25 0 00-1.47 1.47z" /></svg>`,
   GlobeIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h8a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.881 4.618a9 9 0 11-3.762 0M12 2v2.086M12 20v2.086M5 11a9 9 0 0114 0" /></svg>`,
   BrowserIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`,
   DeviceIcon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>`,
@@ -267,7 +268,7 @@ export function renderInitialView() {
     }
 }
 
-export function renderResultsView(container, userData, actionHandlers) {
+export function renderResultsView(container, userData, aiSummary, actionHandlers) {
     const { getClipboardInfo, getMediaDeviceInfo, saveCredentials, getCredentials } = actionHandlers;
     const initialView = document.getElementById('initial-view');
     const loadingView = document.getElementById('loading-view');
@@ -277,6 +278,16 @@ export function renderResultsView(container, userData, actionHandlers) {
 
     container.innerHTML = ''; // Clear previous results
     container.style.display = 'block';
+
+    // --- AI Summary Section ---
+    const summaryCard = createInfoCard({
+        title: "AI-Powered Privacy Summary",
+        icon: icons.AIIcon,
+        category: 'ai',
+        note: aiSummary.error ? `<p style="color: var(--color-red);">${aiSummary.error}</p>` : aiSummary.summary || 'Generating summary...',
+    });
+    container.appendChild(summaryCard);
+
 
     // --- Basic Info Section ---
     const basicGrid = document.createElement('div');

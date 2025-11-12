@@ -1,6 +1,7 @@
 
 import { collectAllData, getClipboardInfo, getMediaDeviceInfo, saveCredentials, getCredentials } from './js/dataCollector.js';
 import { renderInitialView, renderLoadingView, renderResultsView, renderErrorView } from './js/ui.js';
+import { getAiSummary } from './js/ai.js';
 
 const APP_VERSION = '2.4.0';
 
@@ -23,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const data = await collectAllData();
-            renderResultsView(resultsView, data, {
+            const aiSummary = await getAiSummary(data);
+
+            renderResultsView(resultsView, data, aiSummary, {
                 getClipboardInfo,
                 getMediaDeviceInfo,
                 saveCredentials,

@@ -7,12 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Digital Footprint Explorer</title>
     <link rel="stylesheet" href="index.css">
+    <script>
+        // Runs before DOM paints to prevent bright flashes
+        const savedTheme = localStorage.getItem('app-theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
 </head>
 <body>
+    <!-- Ambient Global Layers -->
+    <div class="bg-ambient-glow"></div>
+    <div class="bg-film-grain"></div>
+
     <div class="container">
         <header class="header">
             <h1 class="title">👣 Digital Footprint Explorer</h1>
-            <span class="version-badge" id="app-version"></span>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="version-badge" id="app-version"></span>
+                <button id="themeToggleBtn" class="btn-glass" style="padding: 8px 16px; border-radius: 12px;" aria-label="Toggle Theme">
+                    🌓 Theme
+                </button>
+            </div>
         </header>
 
         <main id="main-content">
@@ -31,9 +50,14 @@
         </main>
 
         <footer class="footer">
-            <button class="btn btn-secondary" id="reveal-button">
-                Reveal My Digital Footprint
-            </button>
+            <div class="golden-btn-wrapper" id="reveal-button-wrapper">
+                <div class="golden-glow"></div>
+                <div class="golden-clip">
+                    <div class="golden-gradient"></div>
+                </div>
+                <!-- Actual clickable button is the inner plate -->
+                <button class="golden-inner" id="reveal-button">Reveal My Digital Footprint</button>
+            </div>
             <p class="copyright">&copy; 2024 Digital Footprint Explorer. An educational tool to promote privacy awareness.</p>
         </footer>
     </div>

@@ -1,35 +1,215 @@
 
+/* ==========================================
+ * 1. CORE VARIABLES (Global Stylesheet)
+ * ========================================== */
 :root {
-  --brand-bg: #1a1a2e;
-  --brand-surface: #16213e;
-  --brand-primary: #0f3460;
-  --brand-secondary: #e94560;
-  --brand-text: #dcdcdc;
-  --brand-subtle: #a7a9be;
+    /* Dark Theme (Default) */
+    --bg-body: #070709;
+    --bg-glass: rgba(22, 22, 26, 0.45);
+    --border-glass: rgba(255, 255, 255, 0.06);
+    --divider: rgba(255, 255, 255, 0.08);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-muted: rgba(255, 255, 255, 0.45);
+    --glow-ambient: rgba(196, 151, 70, 0.08);
+    --inner-plate: #101014;
 
-  --color-cyan: #06b6d4;
-  --color-blue: #3b82f6;
-  --color-purple: #8b5cf6;
-  --color-indigo: #6366f1;
-  --color-green: #22c55e;
-  --color-yellow: #eab308;
-  --color-red: #ef4444;
-  --color-teal: #14b8a6;
-  --color-lime: #84cc16;
-  --color-orange: #f97316;
-  --color-slate: #64748b;
-  --color-sky: #0ea5e9;
-  --color-rose: #f43f5e;
-  --color-fuchsia: #d946ef;
-  --color-violet: #7c3aed;
+    /* Golden Ring Specifics */
+    --ring-glow: rgba(232, 175, 72, 0.15);
+    --focus-ring: rgba(232, 175, 72, 0.6);
+    --easing-bounce: cubic-bezier(0.34, 1.2, 0.64, 1);
+
+    /* Original Brand & Status Colors */
+    --brand-primary: #0f3460;
+    --brand-secondary: #e94560;
+    --color-cyan: #06b6d4;
+    --color-blue: #3b82f6;
+    --color-purple: #8b5cf6;
+    --color-indigo: #6366f1;
+    --color-green: #22c55e;
+    --color-yellow: #eab308;
+    --color-red: #ef4444;
+    --color-teal: #14b8a6;
+    --color-lime: #84cc16;
+    --color-orange: #f97316;
+    --color-slate: #64748b;
+    --color-sky: #0ea5e9;
+    --color-rose: #f43f5e;
+    --color-fuchsia: #d946ef;
+    --color-violet: #7c3aed;
+}
+
+[data-theme="light"] {
+    /* Light Theme Overrides */
+    --bg-body: #f3f3f6;
+    --bg-glass: rgba(255, 255, 255, 0.55);
+    --border-glass: rgba(0, 0, 0, 0.06);
+    --divider: rgba(0, 0, 0, 0.08);
+    --text-primary: rgba(0, 0, 0, 0.95);
+    --text-muted: rgba(0, 0, 0, 0.5);
+    --glow-ambient: rgba(196, 151, 70, 0.12);
+    --inner-plate: #fcfcfd;
+    --ring-glow: rgba(232, 175, 72, 0.25);
 }
 
 body {
-  margin: 0;
-  font-family: sans-serif;
-  background-color: var(--brand-bg);
-  color: var(--brand-text);
-  min-height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    min-height: 100vh;
+    transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+/* ==========================================
+ * 2. BACKGROUND EFFECTS
+ * ========================================== */
+.bg-ambient-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, var(--glow-ambient) 0%, transparent 65%);
+    z-index: -2;
+    transition: background 0.6s ease;
+}
+
+.bg-film-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999; /* Stays on top of everything */
+    opacity: 0.25;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================
+ * 3. GLASSMORPHISM UTILITIES
+ * ========================================== */
+/* Use this for Cards, Modals, and Navbars */
+.glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: background 0.6s ease, border-color 0.6s ease;
+}
+
+/* Standard Secondary/Ghost Buttons */
+.btn-glass {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 12px 24px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: color 0.4s ease, transform 0.4s var(--easing-bounce), background 0.3s ease;
+}
+
+.btn-glass:hover {
+    color: var(--text-primary);
+    transform: scale(1.05);
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.btn-glass:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* Animation for theme toggle */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8,0,1,1);
+    }
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0,0,0.2,1);
+    }
+}
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+/* ==========================================
+ * 4. GOLDEN RING PRIMARY CTA BUTTON
+ * ========================================== */
+.golden-btn-wrapper {
+    position: relative;
+    display: inline-flex;
+    width: auto;
+    /* Adjust these based on desired button size */
+    height: 48px;
+    border-radius: 16px;
+}
+
+/* Layer 1: The Blur */
+.golden-glow {
+    position: absolute;
+    inset: -4px;
+    background: var(--ring-glow);
+    filter: blur(12px);
+    border-radius: 22px;
+    z-index: 1;
+    transition: background 0.6s ease;
+}
+
+/* Layer 2: The Mask */
+.golden-clip {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    z-index: 2;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+/* Layer 3: The Spinning Prismatic Gradient */
+.golden-gradient {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: repeating-conic-gradient(
+        from 0deg,
+        #533517 0%, #c49746 10%, #feeaa5 25%, #c49746 38%,
+        #ffffff 38.5%, #ffffff 39.5%, #ffc0cb 40.25%, #87ceeb 41%,
+        #ffffff 41.75%, #ffffff 42.75%, #c49746 44%, #533517 50%
+    );
+    animation: spin-gradient 4.5s linear infinite;
+}
+
+/* Layer 4: The Clickable Inner Button */
+.golden-inner {
+    position: absolute;
+    inset: 2px; /* Exposes 2px of the rotating gradient */
+    border-radius: 14px;
+    background: var(--inner-plate);
+    color: var(--text-primary);
+    z-index: 3;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0 24px;
+    transition: transform 0.4s var(--easing-bounce), background 0.6s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.golden-inner:hover {
+    transform: scale(1.02);
+}
+
+.golden-inner:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+}
+
+@keyframes spin-gradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .container {
@@ -72,7 +252,7 @@ body {
 .version-badge {
   font-size: 0.75rem;
   background-color: var(--brand-primary);
-  color: var(--brand-subtle);
+  color: var(--text-muted);
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
 }
@@ -101,7 +281,7 @@ body {
 .intro-text {
   max-width: 42rem;
   margin: 0 auto 2rem auto;
-  color: var(--brand-subtle);
+  color: var(--text-muted);
 }
 
 /* Results View */
@@ -151,11 +331,12 @@ body {
 }
 
 .copyright {
-  color: var(--brand-subtle);
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
 /* Buttons */
+/* Kept for backward compatibility if needed, but using utilities going forward */
 .btn {
   font-weight: bold;
   padding: 0.75rem 2rem;
@@ -196,27 +377,37 @@ body {
 
 .btn-card {
     width: 100%;
-    background-color: var(--brand-primary);
-    color: white;
+    background-color: transparent;
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
     font-weight: bold;
     padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    transition: background-color 0.2s;
+    border-radius: 12px;
+    transition: background-color 0.2s, color 0.2s;
     margin-bottom: 0;
     margin-top: 1rem;
+    cursor: pointer;
 }
 
 .btn-card:hover {
-    background-color: #3b82f6;
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.btn-card:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Info Card */
 .info-card {
-  background-color: var(--brand-surface);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-glass);
   border-top-width: 4px;
-  border-style: solid;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: background 0.6s ease, border-color 0.6s ease;
   overflow: hidden;
 }
 
@@ -247,7 +438,7 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--brand-primary);
+  border-bottom: 1px solid var(--divider);
 }
 .data-row:last-child {
   border-bottom: none;
@@ -255,7 +446,7 @@ body {
 .data-row dt {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--brand-subtle);
+  color: var(--text-muted);
   text-transform: capitalize;
   padding-right: 0.5rem;
 }
@@ -268,13 +459,13 @@ body {
 
 .info-card-note {
     font-size: 0.75rem;
-    color: var(--brand-subtle);
+    color: var(--text-muted);
     padding-top: 0.75rem;
     margin-top: 0.75rem;
-    border-top: 1px solid var(--brand-primary);
+    border-top: 1px solid var(--divider);
 }
 .info-card-note strong {
-    color: var(--brand-text);
+    color: var(--text-primary);
 }
 .info-card-note p + p {
     margin-top: 0.5rem;
@@ -308,7 +499,7 @@ body {
 }
 .loading-view .loading-subtext {
     font-size: 0.875rem;
-    color: var(--brand-subtle);
+    color: var(--text-muted);
     margin-top: 0.5rem;
 }
 
